@@ -1,0 +1,10 @@
+typings
+dist
+lib
+*.d.ts
+*.js
+*.map
+jspm_packages
+node_modules
+bower_components
+platforms

@@ -1,0 +1,36 @@
+{
+  "name": "journaly",
+  "productName": "journaly",
+  "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
+  "version": "0.0.1",
+  "private": false,
+  "description": "simple pub-sub like project",
+  "main": "index.js",
+  "keywords": [
+    "judahh",
+    "socket"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Judahh/journaly.git"
+  },
+  "homepage": "https://github.com/Judahh/journaly#readme",
+  "license": "BSD-3-Clause",
+  "angular-cli": {},
+  "scripts": {
+    "postinstall": "tsc",
+    "prestart": "",
+    "lint": "tslint \"src/**/*.ts\"",
+    "test": "ng test",
+    "pree2e": "webdriver-manager update",
+    "e2e": "protractor",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "build": "gulp build",
+    "clean": "shx rm -Rf build/"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "12.6.8"
+  }
+}
