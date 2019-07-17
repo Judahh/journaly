@@ -1,4 +1,6 @@
-export class Journaly {
+import { Observer } from "../observer/observer";
+
+export class Journaly implements Observer{
     private hasMemory: boolean;
     private subscribers: any;
     private subscribersOldData: any;
