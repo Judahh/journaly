@@ -2,7 +2,7 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "description": "simple pub-sub like project",
   "main": "index.js",
@@ -29,8 +29,10 @@
     "build": "gulp build",
     "clean": "shx rm -Rf build/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node": "12.9.1"
+  },
   "devDependencies": {
-    "@types/node": "12.6.8"
+    "@types/node": "12.7.4"
   }
 }
