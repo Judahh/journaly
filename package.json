@@ -2,7 +2,7 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "description": "simple pub-sub like project",
   "main": "index.js",
@@ -34,7 +34,7 @@
     "tslint": "5.20.1"
   },
   "devDependencies": {
-    "@types/node": "12.7.4",
+    "@types/node": "12.12.14",
     "typescript": "3.7.3"
   }
 }
