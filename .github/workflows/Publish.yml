@@ -1,0 +1,45 @@
+name: Publish
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 13.x]
+
+    steps:
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Install
+      uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: install # will run `yarn install` command
+    - name: Build
+      uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: build # will run `yarn build` command
+    - name: Test
+      uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: test # will run `yarn test` command
+    - name: Publish
+      if: contains(matrix.node-version, '13.x')
+      run: |
+        npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+        CI: true

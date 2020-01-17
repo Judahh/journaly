@@ -11,4 +11,6 @@
 config.gypi
 CVS
 npm-debug.log
-.travis.yml
+.test.ts
+temp.ts
+.yml

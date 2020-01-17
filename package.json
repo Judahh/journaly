@@ -2,7 +2,7 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "private": false,
   "description": "simple pub-sub like project",
   "main": "index.js",
@@ -18,22 +18,25 @@
   "license": "BSD-3-Clause",
   "angular-cli": {},
   "scripts": {
-    "postinstall": "tsc",
-    "prestart": "",
+    "postinstall": "",
+    "prepublish": "",
+    "build": "tsc",
     "lint": "tslint \"src/**/*.ts\"",
-    "test": "ng test",
-    "pree2e": "webdriver-manager update",
-    "e2e": "protractor",
+    "test": "jest --passWithNoTests",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "build": "gulp build",
+    "ntsc": "ntsc",
+    "ntsc:w": "ntsc -w",
     "clean": "shx rm -Rf build/"
   },
   "dependencies": {
-    "tslint": "5.20.1"
   },
   "devDependencies": {
-    "@types/node": "13.1.2",
-    "typescript": "3.7.4"
+    "jest": "^24.9.0",
+    "ts-jest": "^24.3.0",
+    "tslint": "^5.20.1",
+    "typescript": "3.7.5",
+    "@types/node": "13.1.7",
+    "@types/jest": "^24.9.0"
   }
 }
