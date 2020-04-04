@@ -2,53 +2,54 @@
 import { Observer } from '../observer/observer';
 
 export class Journaly implements Observer {
-  private hasMemory: boolean;
-  private subscribers: any;
-  private subscribersOldData: any;
+  private subscribers: { [subject: string]: Array<(data) => Promise<any>> };
+  private oldData: { [subject: string]: Array<any> } | undefined;
 
   constructor(hasMemory?) {
     this.subscribers = {};
-    this.hasMemory = hasMemory || false;
-    if (this.hasMemory) {
-      this.subscribersOldData = {};
+    if (hasMemory) {
+      this.oldData = {};
     }
   }
 
-  public subscribe(subject: string, subscriber: (data) => Promise<any>): void {
+  public subscribe(
+    subject: string,
+    subscriber: (data) => Promise<any>
+  ): Promise<any> {
     this.checkSubscribers(subject);
     this.subscribers[subject].push(subscriber);
-    if (this.hasMemory) {
-      this.subscribersOldData[subject].forEach((data) => {
-        subscriber(data);
-      });
+    if (this.oldData) {
+      const datas = this.oldData[subject];
+      return Promise.all(datas.map((data) => subscriber(data)));
     }
+    return Promise.resolve([]);
   }
 
   public unsubscribe(
     subject: string,
     subscriber: (data) => Promise<any>
-  ): void {
+  ): Array<(data) => Promise<any>> {
     this.checkSubscribers(subject);
-    this.subscribers[subject] = this.subscribers[subject].filter((element) => {
-      return element !== subscriber;
-    });
+    this.subscribers[subject] = this.subscribers[subject].filter(
+      (element) => element !== subscriber
+    );
+    return this.subscribers[subject];
   }
 
   public async publish(subject: string, data): Promise<any> {
     this.checkSubscribers(subject);
-    if (this.hasMemory) {
-      this.subscribersOldData[subject].push(data);
+    if (this.oldData) {
+      this.oldData[subject].push(data);
     }
     const subscribers = this.subscribers[subject];
-
     return Promise.all(subscribers.map((subscriber) => subscriber(data)));
   }
 
   private checkSubscribers(subject: string): void {
     if (!this.subscribers[subject]) {
-      this.subscribers[subject] = new Array<Promise<any>>();
-      if (this.hasMemory) {
-        this.subscribersOldData[subject] = new Array<Promise<any>>();
+      this.subscribers[subject] = new Array<(data) => Promise<any>>();
+      if (this.oldData) {
+        this.oldData[subject] = new Array<Promise<any>>();
       }
     }
   }
