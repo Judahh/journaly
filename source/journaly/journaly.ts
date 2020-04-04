@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Observer } from '../observer/observer';
 
-export class Journaly implements Observer {
-  private subscribers: { [subject: string]: Array<(data) => Promise<any>> };
-  private oldData: { [subject: string]: Array<any> } | undefined;
+export class Journaly<Result> implements Observer {
+  private subscribers: {
+    [subject: string]: Array<(...params) => Promise<Result>>;
+  };
+  private oldData: { [subject: string]: Array<Array<unknown>> } | undefined;
 
   constructor(hasMemory?) {
     this.subscribers = {};
@@ -14,21 +15,21 @@ export class Journaly implements Observer {
 
   public subscribe(
     subject: string,
-    subscriber: (data) => Promise<any>
-  ): Promise<any> {
+    subscriber: (...params) => Promise<Result>
+  ): Promise<Array<Result>> {
     this.checkSubscribers(subject);
     this.subscribers[subject].push(subscriber);
     if (this.oldData) {
       const datas = this.oldData[subject];
-      return Promise.all(datas.map((data) => subscriber(data)));
+      return Promise.all(datas.map((params) => subscriber(...params)));
     }
     return Promise.resolve([]);
   }
 
   public unsubscribe(
     subject: string,
-    subscriber: (data) => Promise<any>
-  ): Array<(data) => Promise<any>> {
+    subscriber: (...params) => Promise<Result>
+  ): Array<(...params) => Promise<Result>> {
     this.checkSubscribers(subject);
     this.subscribers[subject] = this.subscribers[subject].filter(
       (element) => element !== subscriber
@@ -36,20 +37,20 @@ export class Journaly implements Observer {
     return this.subscribers[subject];
   }
 
-  public async publish(subject: string, data): Promise<any> {
+  public async publish(subject: string, ...params): Promise<Array<Result>> {
     this.checkSubscribers(subject);
     if (this.oldData) {
-      this.oldData[subject].push(data);
+      this.oldData[subject].push(params);
     }
     const subscribers = this.subscribers[subject];
-    return Promise.all(subscribers.map((subscriber) => subscriber(data)));
+    return Promise.all(subscribers.map((subscriber) => subscriber(...params)));
   }
 
   private checkSubscribers(subject: string): void {
     if (!this.subscribers[subject]) {
-      this.subscribers[subject] = new Array<(data) => Promise<any>>();
+      this.subscribers[subject] = new Array<(...params) => Promise<Result>>();
       if (this.oldData) {
-        this.oldData[subject] = new Array<Promise<any>>();
+        this.oldData[subject] = new Array<Array<unknown>>();
       }
     }
   }
