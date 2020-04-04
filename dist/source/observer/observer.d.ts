@@ -3,3 +3,4 @@ export interface Observer {
     unsubscribe: Function;
     publish: Function;
 }
+//# sourceMappingURL=observer.d.ts.map
