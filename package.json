@@ -2,7 +2,7 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "simple pub-sub like project",
   "main": "dist/source/index.js",
