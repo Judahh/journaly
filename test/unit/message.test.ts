@@ -262,13 +262,14 @@ test(
     const journaly = new Journaly(true);
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
-    console.log(function1Bound);
 
     const subscribe1 = journaly.subscribe('test', function1Bound);
     const subscribe2 = journaly.subscribe('test', class0.function2);
     const subscribe3 = journaly.subscribe('test2', class0.function3);
 
     const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
+
+    expect(journaly.getSubjects()).toStrictEqual(['test', 'test2']);
 
     expect(subscribes[0]).toStrictEqual([]);
     expect(subscribes[1]).toStrictEqual([]);
