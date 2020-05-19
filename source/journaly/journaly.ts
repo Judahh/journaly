@@ -1,6 +1,7 @@
 import { Observer } from '../observer/observer';
 
 export class Journaly<Result> implements Observer {
+  //! TODO: Add get subjects
   private subscribers: {
     [subject: string]: Array<(...params) => Promise<Result>>;
   };
@@ -11,6 +12,24 @@ export class Journaly<Result> implements Observer {
     if (hasMemory) {
       this.oldData = {};
     }
+  }
+
+  public getSubjects(): Array<string> {
+    let subjects = new Array<string>();
+
+    if (this.oldData) {
+      const newProps = Object.getOwnPropertyNames(this.oldData);
+      subjects = newProps;
+    }
+
+    if (this.subscribers) {
+      const newProps = Object.getOwnPropertyNames(this.oldData);
+      for (const prop of newProps) {
+        if (!subjects.includes(prop)) subjects.push(prop);
+      }
+    }
+
+    return subjects;
   }
 
   public subscribe(
