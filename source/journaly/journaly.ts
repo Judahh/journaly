@@ -23,7 +23,7 @@ export class Journaly<Result> implements Observer {
     }
 
     if (this.subscribers) {
-      const newProps = Object.getOwnPropertyNames(this.oldData);
+      const newProps = Object.getOwnPropertyNames(this.subscribers);
       for (const prop of newProps) {
         if (!subjects.includes(prop)) subjects.push(prop);
       }
