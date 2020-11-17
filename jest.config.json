@@ -6,14 +6,23 @@
     }
   },
   "testEnvironment": "node",
-  "roots": ["<rootDir>/test/unit"],
-  "testMatch": ["**/__test__/**/*.+(ts|tsx)", "**/?(*.)+(spec|test).+(ts|tsx)"],
+  "roots": [
+    "<rootDir>/test/unit"
+  ],
+  "testMatch": [
+    "**/__test__/**/*.+(ts|tsx)",
+    "**/?(*.)+(spec|test).+(ts|tsx)"
+  ],
   "transform": {
     "^.+\\.(ts|tsx)$": "ts-jest"
   },
   "clearMocks": true,
   "collectCoverage": true,
-  "collectCoverageFrom": ["source/**"],
+  "collectCoverageFrom": [
+    "source/**"
+  ],
   "coverageDirectory": "test/unit/coverage",
-  "setupFilesAfterEnv": ["./test/unit/setup.ts"]
+  "setupFilesAfterEnv": [
+    "./test/unit/setup.ts"
+  ]
 }
