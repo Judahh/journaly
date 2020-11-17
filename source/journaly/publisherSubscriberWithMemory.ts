@@ -39,7 +39,7 @@ export class PublisherSubscriberWithMemory<Result>
   unsubscribe(
     topic: string,
     subscriber?: (...params) => Promise<Result>
-  ): ((...params) => Promise<Result>)[] {
+  ): Array<(...params) => Promise<Result>> {
     this.checkSubscribers(topic);
     this.subscribers[topic] = this.subscribers[topic].filter(
       (element) => element !== subscriber
