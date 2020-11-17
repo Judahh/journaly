@@ -1,4 +1,5 @@
 import { Journaly } from '../../source/index';
+import { PublisherSubscriber } from '../../source/journaly/publisherSubscriber';
 const timeout = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -72,7 +73,9 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = new Journaly<string>();
+    const journaly = Journaly.newJournaly<string>({
+      multiple: true,
+    }) as PublisherSubscriber<string>;
     const subscribe1 = journaly.subscribe('test', function1);
     const subscribe2 = journaly.subscribe('test', function2);
     const subscribe3 = journaly.subscribe('test2', function3);
@@ -133,7 +136,10 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = new Journaly(true);
+    const journaly = Journaly.newJournaly({
+      hasMemory: true,
+      multiple: true,
+    });
     const subscribe1 = journaly.subscribe('test', function1);
     const subscribe2 = journaly.subscribe('test', function2);
     const subscribe3 = journaly.subscribe('test2', function3);
@@ -196,7 +202,9 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = new Journaly<string>();
+    const journaly = Journaly.newJournaly({
+      multiple: true,
+    });
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
     const subscribe1 = journaly.subscribe('test', function1Bound);
@@ -259,7 +267,10 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = new Journaly(true);
+    const journaly = Journaly.newJournaly({
+      hasMemory: true,
+      multiple: true,
+    });
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
 
@@ -269,7 +280,7 @@ test(
 
     const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
 
-    expect(journaly.getSubjects()).toStrictEqual(['test', 'test2']);
+    expect(journaly.getTopics()).toStrictEqual(['test', 'test2']);
 
     expect(subscribes[0]).toStrictEqual([]);
     expect(subscribes[1]).toStrictEqual([]);
