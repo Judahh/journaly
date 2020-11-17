@@ -1,3 +1,4 @@
+// file deepcode ignore no-any: just for test
 import { Journaly } from '../../source/index';
 const timeout = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));

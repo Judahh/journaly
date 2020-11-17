@@ -1,3 +1,4 @@
+// file deepcode ignore no-any: just for test
 import { Journaly } from '../../source/index';
 import { PublisherSubscriber } from '../../source/journaly/publisherSubscriber';
 const timeout = (ms: number): Promise<void> => {
