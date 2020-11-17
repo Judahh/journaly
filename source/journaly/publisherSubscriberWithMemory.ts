@@ -12,9 +12,11 @@ export class PublisherSubscriberWithMemory<Result>
   }
 
   public getTopics(): string[] {
-    let topics = new Array<string>();
+    const topics = new Array<string>();
     let newProps = Object.getOwnPropertyNames(this.oldData);
-    topics = newProps;
+    for (const prop of newProps) {
+      if (!topics.includes(prop)) topics.push(prop);
+    }
 
     newProps = Object.getOwnPropertyNames(this.subscribers);
     for (const prop of newProps) {

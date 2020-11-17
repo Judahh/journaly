@@ -12,18 +12,15 @@ export class SubjectObserverWithMemory<Result>
   }
 
   public getTopics(): string[] {
-    let topics = new Array<string>();
-
-    if (this.oldData) {
-      const newProps = Object.getOwnPropertyNames(this.oldData);
-      topics = newProps;
+    const topics = new Array<string>();
+    let newProps = Object.getOwnPropertyNames(this.oldData);
+    for (const prop of newProps) {
+      if (!topics.includes(prop)) topics.push(prop);
     }
 
-    if (this.subscribers) {
-      const newProps = Object.getOwnPropertyNames(this.subscribers);
-      for (const prop of newProps) {
-        if (!topics.includes(prop)) topics.push(prop);
-      }
+    newProps = Object.getOwnPropertyNames(this.subscribers);
+    for (const prop of newProps) {
+      if (!topics.includes(prop)) topics.push(prop);
     }
 
     return topics;
