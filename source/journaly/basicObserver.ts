@@ -15,8 +15,8 @@ export class BasicObserver<Result> implements Observer {
     this.subscribers = {};
   }
 
-  public getTopics(): string[] {
-    const topics = new Array<string>();
+  getTopics(): string[] {
+    const topics: string[] = [];
 
     if (this.subscribers) {
       const newProps = Object.getOwnPropertyNames(this.subscribers);
@@ -28,7 +28,7 @@ export class BasicObserver<Result> implements Observer {
     return topics;
   }
 
-  public subscribe(
+  subscribe(
     topic: string,
     subscriber: (...params) => Promise<Result>
   ): Promise<Result[]> {
@@ -37,7 +37,7 @@ export class BasicObserver<Result> implements Observer {
     return Promise.resolve([]);
   }
 
-  public unsubscribe(
+  unsubscribe(
     topic: string,
     subscriber?: (...params) => Promise<Result>
   ): ((...params) => Promise<Result>) | ((...params) => Promise<Result>)[] {
@@ -47,7 +47,7 @@ export class BasicObserver<Result> implements Observer {
     return removedSubscriber;
   }
 
-  public async publish(topic: string, ...params): Promise<Result | Result[]> {
+  async publish(topic: string, ...params): Promise<Result | Result[]> {
     this.checkSubscribers(topic);
     const subscribers = this.subscribers[topic];
     if (subscribers instanceof Array)

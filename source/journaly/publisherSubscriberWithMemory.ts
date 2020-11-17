@@ -11,8 +11,8 @@ export class PublisherSubscriberWithMemory<Result>
     this.oldData = {};
   }
 
-  public getTopics(): string[] {
-    const topics = new Array<string>();
+  getTopics(): string[] {
+    const topics: string[] = [];
     let newProps = Object.getOwnPropertyNames(this.oldData);
     for (const prop of newProps) {
       if (!topics.includes(prop)) topics.push(prop);
@@ -26,7 +26,7 @@ export class PublisherSubscriberWithMemory<Result>
     return topics;
   }
 
-  public subscribe(
+  subscribe(
     topic: string,
     subscriber: (...params) => Promise<Result>
   ): Promise<Result[]> {
@@ -36,7 +36,7 @@ export class PublisherSubscriberWithMemory<Result>
     return Promise.all(datas.map((params) => subscriber(...params)));
   }
 
-  public unsubscribe(
+  unsubscribe(
     topic: string,
     subscriber?: (...params) => Promise<Result>
   ): ((...params) => Promise<Result>)[] {
@@ -48,7 +48,7 @@ export class PublisherSubscriberWithMemory<Result>
     return this.subscribers[topic];
   }
 
-  public async publish(topic: string, ...params): Promise<Result[]> {
+  async publish(topic: string, ...params): Promise<Result[]> {
     this.checkSubscribers(topic);
     this.oldData[topic].push(params);
     const subscribers = this.subscribers[topic];

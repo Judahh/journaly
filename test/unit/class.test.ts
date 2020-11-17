@@ -10,34 +10,34 @@ class Class0 {
   constructor(simpleString?: string) {
     if (simpleString) this.simpleString = simpleString;
   }
-  public async function1(object): Promise<string> {
+  async function1(object): Promise<string> {
     await timeout(1000);
     stringArray.push('test 1 ' + this.simpleString);
     objectArray.push(object);
     return new Promise((resolve) => resolve('1asd'));
   }
 
-  public async function2(object): Promise<string> {
+  async function2(object): Promise<string> {
     stringArray.push('test 1 qwe');
     objectArray.push(object);
     return new Promise((resolve) => resolve('1qwe'));
   }
 
-  public async function3(object, object2): Promise<string> {
+  async function3(object, object2): Promise<string> {
     stringArray.push('test 2 asd');
     objectArray.push([object, object2]);
     await timeout(500);
     return new Promise((resolve) => resolve('2asd'));
   }
 
-  public async function4(object, object2): Promise<string> {
+  async function4(object, object2): Promise<string> {
     stringArray.push('test 2 qwe');
     objectArray.push([object, object2]);
     await timeout(500);
     return new Promise((resolve) => resolve('2qwe'));
   }
 
-  public function5(object, object2): Promise<string> {
+  function5(object, object2): Promise<string> {
     stringArray.push('test 3 dfg');
     objectArray.push([object, object2]);
     return new Promise((resolve) => {
@@ -45,7 +45,7 @@ class Class0 {
     });
   }
 
-  public function6(object, object2): Promise<string> {
+  function6(object, object2): Promise<string> {
     stringArray.push('test 3 hjk');
     objectArray.push([object, object2]);
     return new Promise((resolve) => {
@@ -53,7 +53,7 @@ class Class0 {
     });
   }
 
-  public function7(object, object2, time): Promise<string> {
+  function7(object, object2, time): Promise<string> {
     stringArray.push('test 3 tyi');
     objectArray.push([object, object2]);
     return new Promise((resolve) => {

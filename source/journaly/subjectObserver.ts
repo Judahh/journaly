@@ -15,8 +15,8 @@ export class SubjectObserver<Result>
     this.subscribers = {};
   }
 
-  public getTopics(): string[] {
-    const topics = new Array<string>();
+  getTopics(): string[] {
+    const topics: string[] = [];
 
     if (this.subscribers) {
       const newProps = Object.getOwnPropertyNames(this.subscribers);
@@ -28,7 +28,7 @@ export class SubjectObserver<Result>
     return topics;
   }
 
-  public subscribe(
+  subscribe(
     topic: string,
     subscriber: (...params) => Promise<Result>
   ): Promise<Result[]> {
@@ -37,14 +37,14 @@ export class SubjectObserver<Result>
     return Promise.resolve([]);
   }
 
-  public unsubscribe(topic: string): (...params) => Promise<Result> {
+  unsubscribe(topic: string): (...params) => Promise<Result> {
     this.checkSubscribers(topic);
     const subscriber = this.subscribers[topic];
     delete this.subscribers[topic];
     return subscriber;
   }
 
-  public async publish(topic: string, ...params): Promise<Result> {
+  async publish(topic: string, ...params): Promise<Result> {
     this.checkSubscribers(topic);
     const subscriber = this.subscribers[topic];
     return Promise.resolve(subscriber(...params));
