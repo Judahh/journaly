@@ -5,7 +5,7 @@ export class PublisherSubscriber<Result>
   extends BasicObserver<Result>
   implements Observer {
   protected subscribers: {
-    [subject: string]: ((...params) => Promise<Result>)[];
+    [topic: string]: Array<(...params) => Promise<Result>>;
   };
   constructor() {
     super();
@@ -34,7 +34,7 @@ export class PublisherSubscriber<Result>
   unsubscribe(
     topic: string,
     subscriber?: (...params) => Promise<Result>
-  ): ((...params) => Promise<Result>)[] {
+  ): Array<(...params) => Promise<Result>> {
     this.checkSubscribers(topic);
     this.subscribers[topic] = this.subscribers[topic].filter(
       (element) => element !== subscriber

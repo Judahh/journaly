@@ -8,7 +8,7 @@ export class BasicObserver<Result> implements Observer {
         [topic: string]: (...params) => Promise<Result>;
       }
     | {
-        [topic: string]: ((...params) => Promise<Result>)[];
+        [topic: string]: Array<(...params) => Promise<Result>>;
       };
 
   constructor() {
@@ -40,7 +40,7 @@ export class BasicObserver<Result> implements Observer {
   unsubscribe(
     topic: string,
     subscriber?: (...params) => Promise<Result>
-  ): ((...params) => Promise<Result>) | ((...params) => Promise<Result>)[] {
+  ): ((...params) => Promise<Result>) | Array<(...params) => Promise<Result>> {
     this.checkSubscribers(topic);
     const removedSubscriber = this.subscribers[topic];
     delete this.subscribers[topic];
