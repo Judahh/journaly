@@ -1,4 +1,5 @@
 # Journaly
+
 ![Publish](https://github.com/Judahh/journaly/workflows/Publish/badge.svg)
 [![npm version](https://badge.fury.io/js/journaly.svg)](https://badge.fury.io/js/journaly)
 [![npm downloads](https://img.shields.io/npm/dt/journaly.svg)](https://img.shields.io/npm/dt/journaly.svg)
@@ -51,11 +52,13 @@ console.log(publish1);
 This is a [Node.js](https://nodejs.org/en/) module available through the
 [npm registry](https://www.npmjs.com/).
 
-Before installing, [download and install Node.js](https://nodejs.org/en/download/).
+Before installing,
+[download and install Node.js](https://nodejs.org/en/download/).
 Node.js 12 or higher is required.
 
 If this is a brand new project, make sure to create a `package.json` first with
-the [`npm init` command](https://docs.npmjs.com/creating-a-package-json-file) or [`yarn init` command](https://classic.yarnpkg.com/en/docs/cli/init/).
+the [`npm init` command](https://docs.npmjs.com/creating-a-package-json-file) or
+[`yarn init` command](https://classic.yarnpkg.com/en/docs/cli/init/).
 
 Installation is done using the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally)
@@ -64,16 +67,18 @@ or [`yarn add` command](https://classic.yarnpkg.com/en/docs/cli/add):
 ```bash
 $ npm install journaly
 ```
+
 or
+
 ```bash
 $ yarn add journaly
 ```
 
 ## Features
 
-  * Ready to use Pub-sub design pattern
-  * Promises oriented
-  * Simple implementation
+ - Ready to use Pub-sub design pattern
+ - Promises oriented
+ - Simple implementation
 
 ## Object Example
 
@@ -127,13 +132,15 @@ const journaly = Journaly.newJournaly<string>({
 
 ## Tests
 
-  To run the test suite, first install the dependencies, then run `npm test`:
+To run the test suite, first install the dependencies, then run `npm test`:
 
 ```bash
 $ npm install
 $ npm test
 ```
+
 or
+
 ```bash
 $ yarn
 $ yarn test
