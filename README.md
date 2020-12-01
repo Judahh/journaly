@@ -54,7 +54,6 @@ This is a [Node.js](https://nodejs.org/en/) module available through the
 
 Before installing,
 [download and install Node.js](https://nodejs.org/en/download/).
-Node.js 12 or higher is required.
 
 If this is a brand new project, make sure to create a `package.json` first with
 the [`npm init` command](https://docs.npmjs.com/creating-a-package-json-file) or
@@ -76,9 +75,9 @@ $ yarn add journaly
 
 ## Features
 
- - Ready to use Pub-sub design pattern
- - Promises oriented
- - Simple implementation
+- Ready to use Pub-sub design pattern
+- Promises oriented
+- Simple implementation
 
 ## Object Example
 
