@@ -2,13 +2,21 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": false,
   "description": "A simple pub-sub library project",
   "main": "dist/source/index.js",
   "keywords": [
-    "judahh",
-    "socket"
+    "message-broker",
+    "pubsub",
+    "pubsubplatform",
+    "publisher-subscriber-pattern",
+    "publisher-subscriber",
+    "observer-pattern",
+    "observer",
+    "nodejs",
+    "typescript",
+    "javascript"
   ],
   "repository": {
     "type": "git",

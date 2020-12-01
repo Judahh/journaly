@@ -11,7 +11,9 @@ const function1 = async (object0, string0): Promise<string> => {
   return new Promise((resolve) => resolve({string0: string0 + ' executed!', object0}));
 };
 
-const journaly = new Journaly<string>();
+const journaly = Journaly.newJournaly<string>({
+      multiple: true,// setting to use pub-sub pattern
+    }) as PublisherSubscriber<string>;
 
 const subscribe1 = journaly.subscribe('test', function1);// Connects function1 to subject test
 
@@ -19,8 +21,28 @@ const subscribes = await Promise.all([subscribe1]);
 
 // Publishes to subject test args: { someObject: 'something' }, 'test 0'
 const publish1 = await journaly.publish('test', { someObject: 'something' }, 'test 0');
-// Prints all responses to publish 1 from functions witch subscribe to subject test
+// Prints all responses to publish 1 from functions which subscribe to subject test
 // Each response is an element of the returned array
+console.log(publish1);
+```
+
+```js
+const function1 = async (object0, string0): Promise<string> => {
+  await timeout(100);
+  return new Promise((resolve) => resolve({string0: string0 + ' executed!', object0}));
+};
+
+const journaly = Journaly.newJournaly<string>({
+      multiple: false,// setting to use observer pattern
+    }) as ObserverSubject<string>;
+
+const subscribe1 = journaly.subscribe('test', function1);// Connects function1 to subject test
+
+const subscribes = await subscribe1;
+
+// Publishes to subject test args: { someObject: 'something' }, 'test 0'
+const publish1 = await journaly.publish('test', { someObject: 'something' }, 'test 0');
+// Prints the response to publish 1 from function 1 which subscribes to subject test
 console.log(publish1);
 ```
 
@@ -65,7 +87,9 @@ class ObjectClass {
 
 const object = new ObjectClass();
 
-const journaly = new Journaly<string>();
+const journaly = Journaly.newJournaly<string>({
+      multiple: true,// setting to use pub-sub pattern
+    }) as PublisherSubscriber<string>;
 
 const subscribe1 = journaly.subscribe('test', object.method1.bind(object));// Connects method1 to subject test
 
@@ -73,8 +97,32 @@ const subscribes = await Promise.all([subscribe1]);
 
 // Publishes to subject test args: { someObject: 'something' }, 'test 0'
 const publish1 = await journaly.publish('test', { someObject: 'something' }, 'test 0');
-// Prints all responses to publish 1 from functions witch subscribe to subject test
+// Prints all responses to publish 1 from functions which subscribe to subject test
 console.log(publish1);
+```
+
+## Settings
+
+```js
+const journaly = Journaly.newJournaly<string>({
+      multiple: true,// setting to use pub-sub pattern
+    }) as PublisherSubscriber<string>;
+
+const journaly = Journaly.newJournaly<string>({
+      multiple: false,// setting to use observer pattern
+    }) as ObserverSubject<string>;
+
+const journaly = Journaly.newJournaly<string>({
+      multiple: true,// setting to use pub-sub pattern
+      hasMemory: true,// setting to store every event,
+      // to send all received events to new subscribers
+    }) as PublisherSubscriberWithMemory<string>;
+
+const journaly = Journaly.newJournaly<string>({
+      multiple: false,// setting to use observer pattern
+      hasMemory: true,// setting to store every event,
+      // to send all received events to new subscribers
+    }) as ObserverSubjectWithMemory<string>;
 ```
 
 ## Tests
