@@ -14,11 +14,13 @@ export class Journaly {
     | PublisherSubscriber<Result>
     | SubjectObserverWithMemory<Result>
     | SubjectObserver<Result> {
-    if (options?.multiple)
-      if (options?.hasMemory)
-        return new PublisherSubscriberWithMemory<Result>();
-      else return new PublisherSubscriber<Result>();
-    else if (options?.hasMemory) return new SubjectObserverWithMemory<Result>();
-    else return new SubjectObserver<Result>();
+    if (options)
+      if (options.multiple)
+        if (options.hasMemory)
+          return new PublisherSubscriberWithMemory<Result>();
+        else return new PublisherSubscriber<Result>();
+      else if (options.hasMemory)
+        return new SubjectObserverWithMemory<Result>();
+    return new SubjectObserver<Result>();
   }
 }
