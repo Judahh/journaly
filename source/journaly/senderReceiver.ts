@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+// file deepcode ignore no-any: any needed
 import { Subject } from '../interfaces/subject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { GenericSubject } from './genericSubject';
@@ -34,13 +33,13 @@ export class SenderReceiver<Result>
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async publish(topic: string, ...params: any): Promise<Result> {
     const subscriber = this.subscribers[topic];
     if (!subscriber) return new Promise((_resolve, reject) => reject());
     return Promise.resolve(subscriber(...params));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected checkSubscriber(
     _subscriber: SubjectPromise<Result>,
     topic: string

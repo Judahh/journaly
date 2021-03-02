@@ -1,3 +1,4 @@
+// file deepcode ignore no-any: any needed
 import { Subject } from '../interfaces/subject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { PublisherSubscriber } from './publisherSubscriber';

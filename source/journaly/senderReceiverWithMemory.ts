@@ -1,4 +1,5 @@
-import { Subject } from '..';
+// file deepcode ignore no-any: any needed
+import { Subject } from '../interfaces/subject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { SenderReceiver } from './senderReceiver';
 
@@ -47,6 +48,7 @@ export class SenderReceiverWithMemory<Result>
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async publish(topic: string, ...params: any[]): Promise<Result> {
     this.checkTopic(topic);
     const promise = super.publish(topic, ...params);

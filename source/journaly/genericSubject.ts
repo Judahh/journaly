@@ -1,3 +1,4 @@
+// file deepcode ignore no-any: any needed
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Subject } from '../interfaces/subject';

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// file deepcode ignore no-any: any needed
 import { Subject } from '../interfaces/subject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { GenericSubject } from './genericSubject';
@@ -41,6 +40,7 @@ export class PublisherSubscriber<Result>
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async publish(topic: string, ...params: any[]): Promise<Result[]> {
     this.checkTopic(topic);
     return Promise.all(
