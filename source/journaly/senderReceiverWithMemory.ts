@@ -1,9 +1,9 @@
-import { Subject } from '../interfaces/subject';
+import { Subject } from '..';
 import { SubjectPromise } from '../types/subjectPromise';
-import { PublisherSubscriber } from './publisherSubscriber';
+import { SenderReceiver } from './senderReceiver';
 
-export class PublisherSubscriberWithMemory<Result>
-  extends PublisherSubscriber<Result>
+export class SenderReceiverWithMemory<Result>
+  extends SenderReceiver<Result>
   implements Subject {
   protected oldData: { [topic: string]: unknown[][] };
 
@@ -13,13 +13,9 @@ export class PublisherSubscriberWithMemory<Result>
   }
 
   getTopics(): string[] {
-    const topics: string[] = [];
-    let newProps = Object.getOwnPropertyNames(this.oldData);
-    for (const prop of newProps) {
-      if (!topics.includes(prop)) topics.push(prop);
-    }
+    const topics: string[] = super.getTopics();
 
-    newProps = Object.getOwnPropertyNames(this.subscribers);
+    const newProps = Object.getOwnPropertyNames(this.subscribers);
     for (const prop of newProps) {
       if (!topics.includes(prop)) topics.push(prop);
     }
@@ -43,21 +39,22 @@ export class PublisherSubscriberWithMemory<Result>
     }
   }
 
-  async publish(topic: string, ...params: any[]): Promise<Result[]> {
-    this.checkTopic(topic);
-    const promises = Promise.all(
-      this.subscribers[topic].map((subscriber) => {
-        return subscriber(...params);
-      })
-    );
-
-    this.oldData[topic].push(params);
-    return promises;
+  unsubscribe(subscriber: SubjectPromise<Result>, topic: string): boolean {
+    if (super.unsubscribe(subscriber, topic)) {
+      delete this.oldData[topic];
+      return true;
+    }
+    return false;
   }
 
+  async publish(topic: string, ...params: any[]): Promise<Result> {
+    this.checkTopic(topic);
+    const promise = super.publish(topic, ...params);
+    this.oldData[topic].push(params);
+    return promise;
+  }
   protected checkTopic(topic: string): void {
-    if (!this.subscribers[topic]) {
-      this.subscribers[topic] = [];
+    if (!this.oldData[topic]) {
       this.oldData[topic] = [];
     }
   }

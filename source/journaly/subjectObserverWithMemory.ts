@@ -1,58 +1,37 @@
-import { Observer } from '../observer/observer';
+import { Subject } from '../interfaces/subject';
+import { SubjectPromise } from '../types/subjectPromise';
 import { SubjectObserver } from './subjectObserver';
 
 export class SubjectObserverWithMemory<Result>
   extends SubjectObserver<Result>
-  implements Observer {
-  protected oldData: { [topic: string]: unknown[][] };
+  implements Subject {
+  protected oldData: unknown[][];
 
   constructor() {
     super();
-    this.oldData = {};
+    this.oldData = [];
   }
 
-  getTopics(): string[] {
-    const topics: string[] = [];
-    let newProps = Object.getOwnPropertyNames(this.oldData);
-    for (const prop of newProps) {
-      if (!topics.includes(prop)) topics.push(prop);
+  async subscribe(subscriber: SubjectPromise<Result>): Promise<Result[]> {
+    try {
+      await super.subscribe(subscriber);
+      return Promise.all(this.oldData.map((params) => subscriber(...params)));
+    } catch (error) {
+      return new Promise((resolve) => {
+        resolve([]);
+      });
     }
-
-    newProps = Object.getOwnPropertyNames(this.subscribers);
-    for (const prop of newProps) {
-      if (!topics.includes(prop)) topics.push(prop);
-    }
-
-    return topics;
-  }
-  subscribe(
-    topic: string,
-    subscriber: (...params) => Promise<Result>
-  ): Promise<Result[]> {
-    this.checkSubscribers(topic);
-    this.subscribers[topic] = subscriber;
-    const datas = this.oldData[topic];
-    return Promise.all(datas.map((params) => subscriber(...params)));
   }
 
-  unsubscribe(topic: string): (...params) => Promise<Result> {
-    this.checkSubscribers(topic);
-    const subscriber = this.subscribers[topic];
-    delete this.subscribers[topic];
-    delete this.oldData[topic];
-    return subscriber;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async publish(...params: any[]): Promise<Result[]> {
+    const promises = Promise.all(
+      this.subscribers.map((subscriber) => {
+        return subscriber(...params);
+      })
+    );
 
-  async publish(topic: string, ...params): Promise<Result> {
-    this.checkSubscribers(topic);
-    const subscriber = this.subscribers[topic];
-    this.oldData[topic].push(params);
-    return Promise.resolve(subscriber(...params));
-  }
-
-  protected checkSubscribers(topic: string): void {
-    if (!this.subscribers[topic] && this.oldData) {
-      this.oldData[topic] = new Array<Array<unknown>>();
-    }
+    this.oldData.push(params);
+    return promises;
   }
 }

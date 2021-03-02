@@ -1,55 +1,54 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Observer } from '../observer/observer';
-import { BasicObserver } from './basicObserver';
+import { Subject } from '../interfaces/subject';
+import { SubjectPromise } from '../types/subjectPromise';
+import { GenericSubject } from './genericSubject';
 
 export class SubjectObserver<Result>
-  extends BasicObserver<Result>
-  implements Observer {
-  protected subscribers: {
-    [topic: string]: (...params) => Promise<Result>;
-  };
+  extends GenericSubject<Result>
+  implements Subject {
+  protected subscribers: Array<SubjectPromise<Result>>;
 
   constructor() {
     super();
-    this.subscribers = {};
+    this.subscribers = [];
   }
 
   getTopics(): string[] {
-    const topics: string[] = [];
+    return [];
+  }
 
-    if (this.subscribers) {
-      const newProps = Object.getOwnPropertyNames(this.subscribers);
-      for (const prop of newProps) {
-        if (!topics.includes(prop)) topics.push(prop);
-      }
+  subscribe(subscriber: SubjectPromise<Result>): Promise<Result[]> {
+    if (this.checkSubscriber(subscriber) !== -1)
+      return new Promise((_resolve, reject) => {
+        reject();
+      });
+    this.subscribers.push(subscriber);
+    return new Promise((resolve) => {
+      resolve([]);
+    });
+  }
+
+  unsubscribe(subscriber: SubjectPromise<Result>): boolean {
+    const index = this.checkSubscriber(subscriber);
+    if (index === -1) {
+      return false;
     }
 
-    return topics;
+    this.subscribers.splice(index, 1);
+    return true;
   }
 
-  subscribe(
-    topic: string,
-    subscriber: (...params) => Promise<Result>
-  ): Promise<Result[]> {
-    this.checkSubscribers(topic);
-    this.subscribers[topic] = subscriber;
-    return Promise.resolve([]);
-  }
-
-  unsubscribe(topic: string): (...params) => Promise<Result> {
-    this.checkSubscribers(topic);
-    const subscriber = this.subscribers[topic];
-    delete this.subscribers[topic];
-    return subscriber;
-  }
-
-  async publish(topic: string, ...params): Promise<Result> {
-    this.checkSubscribers(topic);
-    const subscriber = this.subscribers[topic];
-    return Promise.resolve(subscriber(...params));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async publish(...params: any[]): Promise<Result[]> {
+    return Promise.all(
+      this.subscribers.map((subscriber) => {
+        return subscriber(...params);
+      })
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  protected checkSubscribers(topic: string): void {}
+  protected checkSubscriber(subscriber: SubjectPromise<Result>): number {
+    const index = this.subscribers.indexOf(subscriber);
+    return index;
+  }
 }

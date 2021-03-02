@@ -1,5 +1,9 @@
 // file deepcode ignore no-any: just for test
-import { Journaly } from '../../source/index';
+import {
+  Journaly,
+  SubjectObserver,
+  SubjectObserverWithMemory,
+} from '../../source/index';
 const timeout = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -73,12 +77,13 @@ test(
     objectArray = new Array<any>();
     const journaly = Journaly.newJournaly({
       multiple: true,
+      hasTopic: true,
     });
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
-    const subscribe1 = journaly.subscribe('test', function1Bound);
-    const subscribe2 = journaly.subscribe('test', class0.function2);
-    const subscribe3 = journaly.subscribe('test2', class0.function3);
+    const subscribe1 = journaly.subscribe(function1Bound, 'test');
+    const subscribe2 = journaly.subscribe(class0.function2, 'test');
+    const subscribe3 = journaly.subscribe(class0.function3, 'test2');
 
     const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
 
@@ -106,7 +111,7 @@ test(
       [{ a: 'a' }, { b: 'b' }],
       { a: 'a' },
     ]);
-    const subscribe4 = journaly.subscribe('test2', class0.function4);
+    const subscribe4 = journaly.subscribe(class0.function4, 'test2');
     expect(await subscribe4).toStrictEqual([]);
     expect(stringArray).toStrictEqual([
       'test 1 qwe',
@@ -118,19 +123,15 @@ test(
       [{ a: 'a' }, { b: 'b' }],
       { a: 'a' },
     ]);
-    const remaining0 = journaly.unsubscribe('test', function1Bound);
-    const remaining1 = journaly.unsubscribe('test', class0.function2);
-    const remaining2 = journaly.unsubscribe('test2', class0.function3);
-    const remaining3 = journaly.unsubscribe('test2', class0.function4);
-    expect(remaining0).toStrictEqual([class0.function2]);
-    expect(remaining1).toStrictEqual([]);
-    expect(remaining2).toStrictEqual([class0.function4]);
-    expect(remaining3).toStrictEqual([]);
+    expect(journaly.unsubscribe(function1Bound, 'test')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function2, 'test')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function3, 'test2')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function4, 'test2')).toStrictEqual(true);
 
     const function5Bound = class0.function5.bind(class0);
-    const subscribe5 = journaly.subscribe('test3', function5Bound);
-    const subscribe6 = journaly.subscribe('test4', class0.function6);
-    const subscribe7 = journaly.subscribe('test5', class0.function7);
+    const subscribe5 = journaly.subscribe(function5Bound, 'test3');
+    const subscribe6 = journaly.subscribe(class0.function6, 'test4');
+    const subscribe7 = journaly.subscribe(class0.function7, 'test5');
 
     const subscribes2 = await Promise.all([subscribe5, subscribe6, subscribe7]);
 
@@ -170,13 +171,14 @@ test(
     const journaly = Journaly.newJournaly({
       hasMemory: true,
       multiple: true,
+      hasTopic: true,
     });
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
 
-    const subscribe1 = journaly.subscribe('test', function1Bound);
-    const subscribe2 = journaly.subscribe('test', class0.function2);
-    const subscribe3 = journaly.subscribe('test2', class0.function3);
+    const subscribe1 = journaly.subscribe(function1Bound, 'test');
+    const subscribe2 = journaly.subscribe(class0.function2, 'test');
+    const subscribe3 = journaly.subscribe(class0.function3, 'test2');
 
     const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
 
@@ -204,7 +206,7 @@ test(
       [{ a: 'a' }, { b: 'b' }],
       { a: 'a' },
     ]);
-    const subscribe4 = journaly.subscribe('test2', class0.function4);
+    const subscribe4 = journaly.subscribe(class0.function4, 'test2');
     expect(await subscribe4).toStrictEqual(['2qwe']);
     expect(stringArray).toStrictEqual([
       'test 1 qwe',
@@ -218,19 +220,16 @@ test(
       { a: 'a' },
       [{ a: 'a' }, { b: 'b' }],
     ]);
-    const remaining0 = journaly.unsubscribe('test', function1Bound);
-    const remaining1 = journaly.unsubscribe('test', class0.function2);
-    const remaining2 = journaly.unsubscribe('test2', class0.function3);
-    const remaining3 = journaly.unsubscribe('test2', class0.function4);
-    expect(remaining0).toStrictEqual([class0.function2]);
-    expect(remaining1).toStrictEqual([]);
-    expect(remaining2).toStrictEqual([class0.function4]);
-    expect(remaining3).toStrictEqual([]);
+
+    expect(journaly.unsubscribe(function1Bound, 'test')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function2, 'test')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function3, 'test2')).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function4, 'test2')).toStrictEqual(true);
 
     const function5Bound = class0.function5.bind(class0);
-    const subscribe5 = journaly.subscribe('test3', function5Bound);
-    const subscribe6 = journaly.subscribe('test4', class0.function6);
-    const subscribe7 = journaly.subscribe('test5', class0.function7);
+    const subscribe5 = journaly.subscribe(function5Bound, 'test3');
+    const subscribe6 = journaly.subscribe(class0.function6, 'test4');
+    const subscribe7 = journaly.subscribe(class0.function7, 'test5');
 
     const subscribes2 = await Promise.all([subscribe5, subscribe6, subscribe7]);
 
@@ -267,66 +266,85 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = Journaly.newJournaly();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const journaly: SubjectObserver<unknown> = Journaly.newJournaly({
+      multiple: true,
+    }) as SubjectObserver<unknown>;
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
-    const subscribe1 = journaly.subscribe('test', function1Bound);
-    const subscribe2 = journaly.subscribe('test', class0.function2);
-    const subscribe3 = journaly.subscribe('test2', class0.function3);
+    const subscribe1 = journaly.subscribe(function1Bound);
+    const subscribe2 = journaly.subscribe(class0.function2);
 
-    const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
+    const subscribes = await Promise.all([subscribe1, subscribe2]);
 
-    expect(journaly.getTopics()).toStrictEqual(['test', 'test2']);
+    expect(journaly.getTopics()).toStrictEqual([]);
 
     expect(subscribes[0]).toStrictEqual([]);
     expect(subscribes[1]).toStrictEqual([]);
-    expect(subscribes[2]).toStrictEqual([]);
 
-    const publish1 = journaly.publish('test', { a: 'a' });
-    const publish2 = journaly.publish('test2', { a: 'a' }, { b: 'b' });
+    const publish1 = journaly.publish({ a: 'a' });
+    const publish2 = journaly.publish({ a: 'a' }, { b: 'b' });
 
     const publishes = await Promise.all([publish1, publish2]);
 
-    expect(publishes[0]).toStrictEqual('1qwe');
-    expect(publishes[1]).toStrictEqual('2asd');
+    expect(publishes[0]).toStrictEqual(['1asd', '1qwe']);
+    expect(publishes[1]).toStrictEqual(['1asd', '1qwe']);
 
-    expect(stringArray).toStrictEqual(['test 1 qwe', 'test 2 asd']);
-    expect(objectArray).toStrictEqual([{ a: 'a' }, [{ a: 'a' }, { b: 'b' }]]);
-    const subscribe4 = journaly.subscribe('test2', class0.function4);
+    expect(stringArray).toStrictEqual([
+      'test 1 qwe',
+      'test 1 qwe',
+      'test 1 asd',
+      'test 1 asd',
+    ]);
+    expect(objectArray).toStrictEqual([
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+    ]);
+    const subscribe4 = journaly.subscribe(class0.function4);
     expect(await subscribe4).toStrictEqual([]);
-    expect(stringArray).toStrictEqual(['test 1 qwe', 'test 2 asd']);
-    expect(objectArray).toStrictEqual([{ a: 'a' }, [{ a: 'a' }, { b: 'b' }]]);
-    const remaining0 = journaly.unsubscribe('test', function1Bound);
-    const remaining1 = journaly.unsubscribe('test', class0.function2);
-    const remaining2 = journaly.unsubscribe('test2', class0.function3);
-    const remaining3 = journaly.unsubscribe('test2', class0.function4);
-    expect(remaining0).toStrictEqual(class0.function2);
-    expect(remaining1).toStrictEqual(undefined);
-    expect(remaining2).toStrictEqual(class0.function4);
-    expect(remaining3).toStrictEqual(undefined);
+    expect(stringArray).toStrictEqual([
+      'test 1 qwe',
+      'test 1 qwe',
+      'test 1 asd',
+      'test 1 asd',
+    ]);
+    expect(objectArray).toStrictEqual([
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+    ]);
+
+    expect(journaly.unsubscribe(function1Bound)).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function2)).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function3)).toStrictEqual(false);
+    expect(journaly.unsubscribe(class0.function4)).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function4)).toStrictEqual(false);
 
     const function5Bound = class0.function5.bind(class0);
-    const subscribe5 = journaly.subscribe('test3', function5Bound);
-    const subscribe6 = journaly.subscribe('test4', class0.function6);
-    const subscribe7 = journaly.subscribe('test5', class0.function7);
+    const subscribe5 = journaly.subscribe(function5Bound);
+    const subscribe6 = journaly.subscribe(class0.function6);
+    const subscribe7 = journaly.subscribe(class0.function7);
 
     const subscribes2 = await Promise.all([subscribe5, subscribe6, subscribe7]);
 
-    expect(journaly.getTopics()).toStrictEqual(['test3', 'test4', 'test5']);
+    expect(journaly.getTopics()).toStrictEqual([]);
 
     expect(subscribes2[0]).toStrictEqual([]);
     expect(subscribes2[1]).toStrictEqual([]);
     expect(subscribes2[2]).toStrictEqual([]);
 
-    const publish5 = journaly.publish('test3', { a: 'a' });
-    const publish6 = journaly.publish('test4', { a: 'a' }, { b: 'b' });
-    const publish7 = journaly.publish('test5', { a: 'a' }, { b: 'b' }, 1500);
+    const publish5 = journaly.publish({ a: 'a' });
+    const publish6 = journaly.publish({ a: 'a' }, { b: 'b' });
+    const publish7 = journaly.publish({ a: 'a' }, { b: 'b' }, 1500);
 
     const publishes2 = await Promise.all([publish5, publish6, publish7]);
 
-    expect(publishes2[0]).toStrictEqual('dfgasd');
-    expect(publishes2[1]).toStrictEqual('hjk');
-    expect(publishes2[2]).toStrictEqual('tyi');
+    expect(publishes2[0]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
+    expect(publishes2[1]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
+    expect(publishes2[2]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
     done();
   }
 );
@@ -339,67 +357,79 @@ test(
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
-    const journaly = Journaly.newJournaly({
+    const journaly: SubjectObserverWithMemory<unknown> = Journaly.newJournaly({
       hasMemory: true,
-    });
+      multiple: true,
+    }) as SubjectObserverWithMemory<unknown>;
     const class0 = new Class0();
     const function1Bound = class0.function1.bind(class0);
 
-    const subscribe1 = journaly.subscribe('test', function1Bound);
-    const subscribe2 = journaly.subscribe('test', class0.function2);
-    const subscribe3 = journaly.subscribe('test2', class0.function3);
+    const subscribe1 = journaly.subscribe(function1Bound);
+    const subscribe2 = journaly.subscribe(class0.function2);
 
-    const subscribes = await Promise.all([subscribe1, subscribe2, subscribe3]);
+    const subscribes = await Promise.all([subscribe1, subscribe2]);
 
-    expect(journaly.getTopics()).toStrictEqual(['test', 'test2']);
+    expect(journaly.getTopics()).toStrictEqual([]);
 
     expect(subscribes[0]).toStrictEqual([]);
     expect(subscribes[1]).toStrictEqual([]);
-    expect(subscribes[2]).toStrictEqual([]);
 
-    const publish1 = journaly.publish('test', { a: 'a' });
-    const publish2 = journaly.publish('test2', { a: 'a' }, { b: 'b' });
+    const publish1 = journaly.publish({ a: 'a' });
+    const publish2 = journaly.publish({ a: 'a' }, { b: 'b' });
 
     const publishes = await Promise.all([publish1, publish2]);
 
-    expect(publishes[0]).toStrictEqual('1qwe');
-    expect(publishes[1]).toStrictEqual('2asd');
+    expect(publishes[0]).toStrictEqual(['1asd', '1qwe']);
+    expect(publishes[1]).toStrictEqual(['1asd', '1qwe']);
 
-    expect(stringArray).toStrictEqual(['test 1 qwe', 'test 2 asd']);
-    expect(objectArray).toStrictEqual([{ a: 'a' }, [{ a: 'a' }, { b: 'b' }]]);
-    const subscribe4 = journaly.subscribe('test2', class0.function4);
-    expect(await subscribe4).toStrictEqual(['2qwe']);
     expect(stringArray).toStrictEqual([
       'test 1 qwe',
-      'test 2 asd',
+      'test 1 qwe',
+      'test 1 asd',
+      'test 1 asd',
+    ]);
+    expect(objectArray).toStrictEqual([
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+    ]);
+    const subscribe4 = journaly.subscribe(class0.function4);
+    expect(await subscribe4).toStrictEqual(['2qwe', '2qwe']);
+    expect(stringArray).toStrictEqual([
+      'test 1 qwe',
+      'test 1 qwe',
+      'test 1 asd',
+      'test 1 asd',
+      'test 2 qwe',
       'test 2 qwe',
     ]);
     expect(objectArray).toStrictEqual([
       { a: 'a' },
-      [{ a: 'a' }, { b: 'b' }],
+      { a: 'a' },
+      { a: 'a' },
+      { a: 'a' },
+      [{ a: 'a' }, undefined],
       [{ a: 'a' }, { b: 'b' }],
     ]);
-    const remaining0 = journaly.unsubscribe('test', function1Bound);
-    const remaining1 = journaly.unsubscribe('test', class0.function2);
-    const remaining2 = journaly.unsubscribe('test2', class0.function3);
-    const remaining3 = journaly.unsubscribe('test2', class0.function4);
-    expect(remaining0).toStrictEqual(class0.function2);
-    expect(remaining1).toStrictEqual(undefined);
-    expect(remaining2).toStrictEqual(class0.function4);
-    expect(remaining3).toStrictEqual(undefined);
+
+    expect(journaly.unsubscribe(function1Bound)).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function2)).toStrictEqual(true);
+    expect(journaly.unsubscribe(class0.function3)).toStrictEqual(false);
+    expect(journaly.unsubscribe(class0.function4)).toStrictEqual(true);
 
     const function5Bound = class0.function5.bind(class0);
-    const subscribe5 = journaly.subscribe('test3', function5Bound);
-    const subscribe6 = journaly.subscribe('test4', class0.function6);
-    const subscribe7 = journaly.subscribe('test5', class0.function7);
+    const subscribe5 = journaly.subscribe(function5Bound);
+    const subscribe6 = journaly.subscribe(class0.function6);
+    const subscribe7 = journaly.subscribe(class0.function7);
 
     const subscribes2 = await Promise.all([subscribe5, subscribe6, subscribe7]);
 
-    expect(journaly.getTopics()).toStrictEqual(['test3', 'test4', 'test5']);
+    expect(journaly.getTopics()).toStrictEqual([]);
 
-    expect(subscribes2[0]).toStrictEqual([]);
-    expect(subscribes2[1]).toStrictEqual([]);
-    expect(subscribes2[2]).toStrictEqual([]);
+    expect(subscribes2[0]).toStrictEqual(['dfgasd', 'dfgasd']);
+    expect(subscribes2[1]).toStrictEqual(['hjk', 'hjk']);
+    expect(subscribes2[2]).toStrictEqual(['tyi', 'tyi']);
 
     const publish5 = journaly.publish('test3', { a: 'a' });
     const publish6 = journaly.publish('test4', { a: 'a' }, { b: 'b' });
@@ -407,9 +437,9 @@ test(
 
     const publishes2 = await Promise.all([publish5, publish6, publish7]);
 
-    expect(publishes2[0]).toStrictEqual('dfgasd');
-    expect(publishes2[1]).toStrictEqual('hjk');
-    expect(publishes2[2]).toStrictEqual('tyi');
+    expect(publishes2[0]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
+    expect(publishes2[1]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
+    expect(publishes2[2]).toStrictEqual(['dfgasd', 'hjk', 'tyi']);
     done();
   }
 );

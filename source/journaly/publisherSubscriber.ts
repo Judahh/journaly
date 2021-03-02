@@ -1,56 +1,60 @@
-import { Observer } from '../observer/observer';
-import { BasicObserver } from './basicObserver';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Subject } from '../interfaces/subject';
+import { SubjectPromise } from '../types/subjectPromise';
+import { GenericSubject } from './genericSubject';
 
 export class PublisherSubscriber<Result>
-  extends BasicObserver<Result>
-  implements Observer {
+  extends GenericSubject<Result>
+  implements Subject {
   protected subscribers: {
-    [topic: string]: Array<(...params) => Promise<Result>>;
+    [topic: string]: Array<SubjectPromise<Result>>;
   };
   constructor() {
     super();
     this.subscribers = {};
   }
 
-  getTopics(): string[] {
-    const topics: string[] = [];
-    const newProps = Object.getOwnPropertyNames(this.subscribers);
-    for (const prop of newProps) {
-      if (!topics.includes(prop)) topics.push(prop);
-    }
-
-    return topics;
-  }
-
   subscribe(
-    topic: string,
-    subscriber: (...params) => Promise<Result>
+    subscriber: SubjectPromise<Result>,
+    topic: string
   ): Promise<Result[]> {
-    this.checkSubscribers(topic);
+    this.checkTopic(topic);
+    if (this.checkSubscriber(subscriber, topic) !== -1)
+      return new Promise((_resolve, reject) => {
+        reject();
+      });
     this.subscribers[topic].push(subscriber);
-    return Promise.all([]);
+    return new Promise((resolve) => {
+      resolve([]);
+    });
   }
 
-  unsubscribe(
-    topic: string,
-    subscriber?: (...params) => Promise<Result>
-  ): Array<(...params) => Promise<Result>> {
-    this.checkSubscribers(topic);
-    this.subscribers[topic] = this.subscribers[topic].filter(
-      (element) => element !== subscriber
-    );
-    return this.subscribers[topic];
-  }
-
-  async publish(topic: string, ...params): Promise<Result[]> {
-    this.checkSubscribers(topic);
-    const subscribers = this.subscribers[topic];
-    return Promise.all(subscribers.map((subscriber) => subscriber(...params)));
-  }
-
-  protected checkSubscribers(topic: string): void {
-    if (!this.subscribers[topic]) {
-      this.subscribers[topic] = new Array<(...params) => Promise<Result>>();
+  unsubscribe(subscriber: SubjectPromise<Result>, topic: string): boolean {
+    this.checkTopic(topic);
+    const index = this.checkSubscriber(subscriber, topic);
+    if (index === -1) {
+      return false;
     }
+
+    this.subscribers[topic].splice(index, 1);
+    return true;
+  }
+
+  async publish(topic: string, ...params: any[]): Promise<Result[]> {
+    this.checkTopic(topic);
+    return Promise.all(
+      this.subscribers[topic].map((subscriber) => {
+        return subscriber(...params);
+      })
+    );
+  }
+
+  protected checkSubscriber(
+    subscriber: SubjectPromise<Result>,
+    topic: string
+  ): number {
+    const index = this.subscribers[topic].indexOf(subscriber);
+    return index;
   }
 }
