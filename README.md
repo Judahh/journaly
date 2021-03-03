@@ -13,10 +13,11 @@ const function1 = async (object0, string0): Promise<string> => {
 };
 
 const journaly = Journaly.newJournaly<string>({
-      multiple: true,// setting to use pub-sub pattern
+      multiple: true, // setting to use pub-sub pattern
+      hasTopic: true,
     }) as PublisherSubscriber<string>;
 
-const subscribe1 = journaly.subscribe('test', function1);// Connects function1 to subject test
+const subscribe1 = journaly.subscribe(function1, 'test');// Connects function1 to subject test
 
 const subscribes = await Promise.all([subscribe1]);
 
@@ -34,10 +35,10 @@ const function1 = async (object0, string0): Promise<string> => {
 };
 
 const journaly = Journaly.newJournaly<string>({
-      multiple: false,// setting to use observer pattern
+      multiple: true, // setting to use observer pattern
     }) as ObserverSubject<string>;
 
-const subscribe1 = journaly.subscribe('test', function1);// Connects function1 to subject test
+const subscribe1 = journaly.subscribe(function1, 'test');// Connects function1 to subject test
 
 const subscribes = await subscribe1;
 
@@ -93,9 +94,10 @@ const object = new ObjectClass();
 
 const journaly = Journaly.newJournaly<string>({
       multiple: true,// setting to use pub-sub pattern
+      hasTopic: true,
     }) as PublisherSubscriber<string>;
 
-const subscribe1 = journaly.subscribe('test', object.method1.bind(object));// Connects method1 to subject test
+const subscribe1 = journaly.subscribe(object.method1.bind(object), 'test');// Connects method1 to subject test
 
 const subscribes = await Promise.all([subscribe1]);
 
@@ -110,20 +112,22 @@ console.log(publish1);
 ```js
 const journaly = Journaly.newJournaly<string>({
       multiple: true,// setting to use pub-sub pattern
+      hasTopic: true,
     }) as PublisherSubscriber<string>;
 
 const journaly = Journaly.newJournaly<string>({
-      multiple: false,// setting to use observer pattern
+      multiple: true,// setting to use observer pattern
     }) as ObserverSubject<string>;
 
 const journaly = Journaly.newJournaly<string>({
       multiple: true,// setting to use pub-sub pattern
+      hasTopic: true,
       hasMemory: true,// setting to store every event,
       // to send all received events to new subscribers
     }) as PublisherSubscriberWithMemory<string>;
 
 const journaly = Journaly.newJournaly<string>({
-      multiple: false,// setting to use observer pattern
+      multiple: true,// setting to use observer pattern
       hasMemory: true,// setting to store every event,
       // to send all received events to new subscribers
     }) as ObserverSubjectWithMemory<string>;
@@ -143,6 +147,28 @@ or
 ```bash
 $ yarn
 $ yarn test
+```
+
+## Methods
+
+```js
+// Returns an array with current topics
+getTopics(): string[];
+
+// Subscribe a function to a topic (if applicable) and returns an array
+// with a result corresponding with all the data received before
+subscribe(
+    subscriber: SubjectPromise<Result>,
+    topic?: string
+  ): Promise<Result[]>;
+
+// Unsubscribe a function of a topic (if applicable) and returns an boolean
+// corresponding if it's succedd
+unsubscribe(subscriber: SubjectPromise<Result>, topic?: string): boolean;
+
+// Publish to a topic (if applicable) and returns all the results of
+// subscribbed functions
+publish(topic?: string, ...params: any[]): Promise<Result[] | Result>;
 ```
 
 ## People
