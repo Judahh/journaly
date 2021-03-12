@@ -153,20 +153,20 @@ $ yarn test
 
 ```js
 // Returns an array with current topics
-getTopics(): string[]; 
+getTopics(): string[];
 
-// Subscribe a function to a topic (if applicable) and returns an array 
+// Subscribe a function to a topic (if applicable) and returns an array
 // with a result corresponding with all the data received before
 subscribe(
     subscriber: SubjectPromise<Result>,
     topic?: string
-  ): Promise<Result[]>; 
+  ): Promise<Result[]>;
 
-// Unsubscribe a function of a topic (if applicable) and returns an boolean 
+// Unsubscribe a function of a topic (if applicable) and returns an boolean
 // corresponding if it's succedd
-unsubscribe(subscriber: SubjectPromise<Result>, topic?: string): boolean; 
+unsubscribe(subscriber: SubjectPromise<Result>, topic?: string): boolean;
 
-// Publish to a topic (if applicable) and returns all the results of  
+// Publish to a topic (if applicable) and returns all the results of
 // subscribbed functions
 publish(topic?: string, ...params: any[]): Promise<Result[] | Result>;
 ```
