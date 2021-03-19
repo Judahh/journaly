@@ -119,6 +119,9 @@ const journaly = Journaly.newJournaly<string>({
       multiple: true,// setting to use observer pattern
     }) as ObserverSubject<string>;
 
+const journaly = Journaly.newJournaly<string>({// setting to use sender-receiver pattern
+    }) as SenderReceiver<string>;
+
 const journaly = Journaly.newJournaly<string>({
       multiple: true,// setting to use pub-sub pattern
       hasTopic: true,
@@ -131,6 +134,11 @@ const journaly = Journaly.newJournaly<string>({
       hasMemory: true,// setting to store every event,
       // to send all received events to new subscribers
     }) as ObserverSubjectWithMemory<string>;
+
+const journaly = Journaly.newJournaly<string>({// setting to use sender-receiver pattern
+      hasMemory: true,// setting to store every event,
+      // to send all received events to new subscribers
+    }) as SenderReceiverWithMemory<string>;
 ```
 
 ## Tests
