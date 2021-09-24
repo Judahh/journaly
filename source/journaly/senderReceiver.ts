@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // file deepcode ignore no-any: any needed
-import { Subject } from '../interfaces/subject';
+import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
-import { GenericSubject } from './genericSubject';
+import { Subject } from './subject';
 
 export class SenderReceiver<Result>
-  extends GenericSubject<Result>
-  implements Subject {
+  extends Subject<Result>
+  implements ISubject {
   protected subscribers: {
     [topic: string]: SubjectPromise<Result>;
   };

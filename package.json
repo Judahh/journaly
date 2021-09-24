@@ -2,7 +2,7 @@
   "name": "journaly",
   "productName": "journaly",
   "author": "Judah Holanda Correia Lima <judahholanda7@gmail.com> (https://judahh.com)",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "private": false,
   "description": "A simple pub-sub library project",
   "main": "dist/source/index.js",
@@ -46,7 +46,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/jest": "latest",
+    "@types/jest": "26.0.24",
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
@@ -55,9 +55,9 @@
     "eslint-plugin-filenames": "latest",
     "eslint-plugin-prettier": "latest",
     "eslint-plugin-import": "latest",
-    "jest": "latest",
+    "jest": "26.6.2",
     "prettier": "latest",
-    "ts-jest": "latest",
+    "ts-jest": "26.5.6",
     "typescript": "latest"
   }
 }
