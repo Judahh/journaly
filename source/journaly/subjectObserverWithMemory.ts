@@ -1,11 +1,11 @@
 // file deepcode ignore no-any: any needed
-import { Subject } from '../interfaces/subject';
+import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { SubjectObserver } from './subjectObserver';
 
 export class SubjectObserverWithMemory<Result>
   extends SubjectObserver<Result>
-  implements Subject {
+  implements ISubject {
   protected oldData: unknown[][];
 
   constructor() {
