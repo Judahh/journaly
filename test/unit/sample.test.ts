@@ -1,9 +1,5 @@
 // file deepcode ignore no-any: just for test
-import {
-  Journaly,
-  SubjectObserver,
-  SubjectObserverWithMemory,
-} from '../../source/index';
+import { Journaly, SubjectObserver } from '../../source/index';
 
 class Subscriber {
   private _name: string;
