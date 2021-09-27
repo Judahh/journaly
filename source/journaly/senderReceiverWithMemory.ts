@@ -1,11 +1,11 @@
 // file deepcode ignore no-any: any needed
-import { Subject } from '../interfaces/subject';
+import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
 import { SenderReceiver } from './senderReceiver';
 
 export class SenderReceiverWithMemory<Result>
   extends SenderReceiver<Result>
-  implements Subject {
+  implements ISubject {
   protected oldData: { [topic: string]: unknown[][] };
 
   constructor() {

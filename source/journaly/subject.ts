@@ -1,10 +1,10 @@
 // file deepcode ignore no-any: any needed
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Subject } from '../interfaces/subject';
+import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
 
-export class GenericSubject<Result> implements Subject {
+export class Subject<Result> implements ISubject {
   protected subscribers!:
     | {
         [topic: string]: Array<SubjectPromise<Result>>;
