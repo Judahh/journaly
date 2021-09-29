@@ -5,7 +5,8 @@ import { PublisherSubscriber } from './publisherSubscriber';
 
 export class PublisherSubscriberWithMemory<Result>
   extends PublisherSubscriber<Result>
-  implements ISubject {
+  implements ISubject
+{
   protected oldData: { [topic: string]: unknown[][] };
 
   constructor() {

@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
+import InvalidTopic from './invalidTopic';
 
 export class Subject<Result> implements ISubject {
   protected subscribers!:
@@ -32,7 +33,7 @@ export class Subject<Result> implements ISubject {
     if (topic) this.checkTopic(topic);
     if (this.checkSubscriber(subscriber, topic) !== -1)
       return new Promise((_resolve, reject) => {
-        reject();
+        reject(new InvalidTopic(topic));
       });
     if (topic) this.subscribers[topic].push(subscriber);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

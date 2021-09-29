@@ -2,11 +2,13 @@
 // file deepcode ignore no-any: any needed
 import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
+import InvalidTopic from './invalidTopic';
 import { Subject } from './subject';
 
 export class SenderReceiver<Result>
   extends Subject<Result>
-  implements ISubject {
+  implements ISubject
+{
   protected subscribers: {
     [topic: string]: SubjectPromise<Result>;
   };
@@ -36,7 +38,8 @@ export class SenderReceiver<Result>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async publish(topic: string, ...params: any): Promise<Result> {
     const subscriber = this.subscribers[topic];
-    if (!subscriber) return new Promise((_resolve, reject) => reject());
+    if (!subscriber)
+      return new Promise((_resolve, reject) => reject(new InvalidTopic(topic)));
     return Promise.resolve(subscriber(...params));
   }
 

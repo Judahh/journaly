@@ -1,11 +1,13 @@
 // file deepcode ignore no-any: any needed
 import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
+import InvalidTopic from './invalidTopic';
 import { Subject } from './subject';
 
 export class PublisherSubscriber<Result>
   extends Subject<Result>
-  implements ISubject {
+  implements ISubject
+{
   protected subscribers: {
     [topic: string]: Array<SubjectPromise<Result>>;
   };
@@ -21,7 +23,7 @@ export class PublisherSubscriber<Result>
     this.checkTopic(topic);
     if (this.checkSubscriber(subscriber, topic) !== -1)
       return new Promise((_resolve, reject) => {
-        reject();
+        reject(new InvalidTopic(topic));
       });
     this.subscribers[topic].push(subscriber);
     return new Promise((resolve) => {
