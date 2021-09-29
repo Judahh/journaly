@@ -1,11 +1,13 @@
 // file deepcode ignore no-any: any needed
 import { ISubject } from '../interfaces/iSubject';
 import { SubjectPromise } from '../types/subjectPromise';
+import InvalidSubscriber from './invalidSubscriber';
 import { Subject } from './subject';
 
 export class SubjectObserver<Result>
   extends Subject<Result>
-  implements ISubject {
+  implements ISubject
+{
   protected subscribers: Array<SubjectPromise<Result>>;
 
   constructor() {
@@ -20,7 +22,7 @@ export class SubjectObserver<Result>
   subscribe(subscriber: SubjectPromise<Result>): Promise<Result[]> {
     if (this.checkSubscriber(subscriber) !== -1)
       return new Promise((_resolve, reject) => {
-        reject();
+        reject(new InvalidSubscriber());
       });
     this.subscribers.push(subscriber);
     return new Promise((resolve) => {
