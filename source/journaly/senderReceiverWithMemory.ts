@@ -5,7 +5,8 @@ import { SenderReceiver } from './senderReceiver';
 
 export class SenderReceiverWithMemory<Result>
   extends SenderReceiver<Result>
-  implements ISubject {
+  implements ISubject
+{
   protected oldData: { [topic: string]: unknown[][] };
 
   constructor() {
