@@ -1,5 +1,6 @@
 // file deepcode ignore no-any: just for test
 import { Journaly, SubjectObserver } from '../../source/index';
+import InvalidTopic from '../../source/journaly/invalidTopic';
 
 class Subscriber {
   private _name: string;
@@ -252,16 +253,17 @@ test('Sender Receiver Without Memory', async (done) => {
   expect(subscribes[0]).toStrictEqual([]);
 
   const publish1 = journaly.publish('subject1', 'title 1', 'content 1');
+
   expect(
     journaly.publish('subject2', 'title 2', 'content 2')
-  ).rejects.toStrictEqual(undefined);
+  ).rejects.toStrictEqual(new InvalidTopic('subject2'));
 
-  let publishes = await Promise.all([publish1]);
+  let publishes: unknown[] = await Promise.all([publish1]);
 
   expect(publishes[0]).toStrictEqual(
     '1 reads:\n' + 'title 1\n' + 'content 1\n\n'
   );
-  expect(publishes[1]).toStrictEqual(undefined);
+  expect(publishes.length).toStrictEqual(1);
 
   const subscribe2 = journaly.subscribe(read2, 'subject2');
 
@@ -306,16 +308,17 @@ test('Sender Receiver With Memory', async (done) => {
   expect(subscribes[0]).toStrictEqual([]);
 
   const publish1 = journaly.publish('subject1', 'title 1', 'content 1');
+
   expect(
     journaly.publish('subject2', 'title 2', 'content 2')
-  ).rejects.toStrictEqual(undefined);
+  ).rejects.toStrictEqual(new InvalidTopic('subject2'));
 
-  let publishes = await Promise.all([publish1]);
+  let publishes: unknown[] = await Promise.all([publish1]);
 
   expect(publishes[0]).toStrictEqual(
     '1 reads:\n' + 'title 1\n' + 'content 1\n\n'
   );
-  expect(publishes[1]).toStrictEqual(undefined);
+  expect(publishes.length).toStrictEqual(1);
 
   const subscribe2 = journaly.subscribe(read2, 'subject2');
 
