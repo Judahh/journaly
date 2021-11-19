@@ -55,7 +55,7 @@
     "eslint-plugin-filenames": "latest",
     "eslint-plugin-prettier": "latest",
     "eslint-plugin-import": "latest",
-    "jest": "26.6.2",
+    "jest": "26.6.3",
     "prettier": "latest",
     "ts-jest": "26.5.6",
     "typescript": "latest"
