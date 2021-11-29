@@ -65,7 +65,7 @@ test(
   'Publisher Subscriber Without Memory: subscribe 2 functions one slow and another fast' +
     ' then subscribe one medium' +
     ' then publish to each then check order',
-  async (done) => {
+  async () => {
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
@@ -147,7 +147,6 @@ test(
     expect(publishes2[0]).toStrictEqual(['dfg']);
     expect(publishes2[1]).toStrictEqual(['hjk']);
     expect(publishes2[2]).toStrictEqual(['tyi']);
-    done();
   }
 );
 
@@ -155,7 +154,7 @@ test(
   'Publisher Subscriber With Memory: subscribe 2 functions one slow and another fast' +
     ' then subscribe one medium' +
     ' then publish to each then check order',
-  async (done) => {
+  async () => {
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
@@ -240,7 +239,6 @@ test(
     expect(publishes2[0]).toStrictEqual(['dfg']);
     expect(publishes2[1]).toStrictEqual(['hjk']);
     expect(publishes2[2]).toStrictEqual(['tyi']);
-    done();
   }
 );
 
@@ -248,7 +246,7 @@ test(
   'Subject Observer Without Memory: subscribe 2 functions one slow and another fast' +
     ' then subscribe one medium' +
     ' then publish to each then check order',
-  async (done) => {
+  async () => {
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
@@ -326,7 +324,6 @@ test(
     expect(publishes2[0]).toStrictEqual(['dfg', 'hjk', 'tyi']);
     expect(publishes2[1]).toStrictEqual(['dfg', 'hjk', 'tyi']);
     expect(publishes2[2]).toStrictEqual(['dfg', 'hjk', 'tyi']);
-    done();
   }
 );
 
@@ -334,7 +331,7 @@ test(
   'Subject Observer With Memory: subscribe 2 functions one slow and another fast' +
     ' then subscribe one medium' +
     ' then publish to each then check order',
-  async (done) => {
+  async () => {
     stringArray = new Array<string>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectArray = new Array<any>();
@@ -416,6 +413,5 @@ test(
     expect(publishes2[0]).toStrictEqual(['dfg', 'hjk', 'tyi']);
     expect(publishes2[1]).toStrictEqual(['dfg', 'hjk', 'tyi']);
     expect(publishes2[2]).toStrictEqual(['dfg', 'hjk', 'tyi']);
-    done();
   }
 );
