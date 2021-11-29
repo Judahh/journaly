@@ -23,7 +23,7 @@ class Subscriber {
   }
 }
 
-test('Publisher Subscriber Without Memory', async (done) => {
+test('Publisher Subscriber Without Memory', async () => {
   const journaly = Journaly.newJournaly({
     multiple: true,
     hasTopic: true,
@@ -69,11 +69,9 @@ test('Publisher Subscriber Without Memory', async (done) => {
   expect(publishes[1]).toStrictEqual([
     '2 reads:\n' + 'title 4\n' + 'content 4\n\n',
   ]);
-
-  done();
 });
 
-test('Publisher Subscriber With Memory', async (done) => {
+test('Publisher Subscriber With Memory', async () => {
   const journaly = Journaly.newJournaly({
     multiple: true,
     hasTopic: true,
@@ -122,11 +120,9 @@ test('Publisher Subscriber With Memory', async (done) => {
   expect(publishes[1]).toStrictEqual([
     '2 reads:\n' + 'title 4\n' + 'content 4\n\n',
   ]);
-
-  done();
 });
 
-test('Subject Observer Without Memory', async (done) => {
+test('Subject Observer Without Memory', async () => {
   const journaly = Journaly.newJournaly({
     multiple: true,
   }) as SubjectObserver<string>;
@@ -175,11 +171,9 @@ test('Subject Observer Without Memory', async (done) => {
     '1 reads:\n' + 'title 4\n' + 'content 4\n\n',
     '2 reads:\n' + 'title 4\n' + 'content 4\n\n',
   ]);
-
-  done();
 });
 
-test('Subject Observer With Memory', async (done) => {
+test('Subject Observer With Memory', async () => {
   const journaly = Journaly.newJournaly({
     multiple: true,
     hasMemory: true,
@@ -232,11 +226,9 @@ test('Subject Observer With Memory', async (done) => {
     '1 reads:\n' + 'title 4\n' + 'content 4\n\n',
     '2 reads:\n' + 'title 4\n' + 'content 4\n\n',
   ]);
-
-  done();
 });
 
-test('Sender Receiver Without Memory', async (done) => {
+test('Sender Receiver Without Memory', async () => {
   const journaly = Journaly.newJournaly({
     hasTopic: true,
   });
@@ -284,11 +276,9 @@ test('Sender Receiver Without Memory', async (done) => {
   expect(publishes[1]).toStrictEqual(
     '2 reads:\n' + 'title 4\n' + 'content 4\n\n'
   );
-
-  done();
 });
 
-test('Sender Receiver With Memory', async (done) => {
+test('Sender Receiver With Memory', async () => {
   const journaly = Journaly.newJournaly({
     hasTopic: true,
     hasMemory: true,
@@ -360,6 +350,4 @@ test('Sender Receiver With Memory', async (done) => {
   expect(publishes[0]).toStrictEqual(
     '3 reads:\n' + 'title 5\n' + 'content 5\n\n'
   );
-
-  done();
 });
