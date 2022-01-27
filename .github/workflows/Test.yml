@@ -22,19 +22,13 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: Checkout
         uses: actions/checkout@main
-      - name: Install
-        uses: borales/actions-yarn@master
+      - name: BUILD
+        uses: judahh/nodeBuild@main
         with:
-          cmd: install # will run `yarn install` command
-      - name: Build
-        uses: borales/actions-yarn@master
+          node_version: ${{ matrix.node-version }}
+      - name: TEST
+        uses: judahh/yarnTest@main
+      - name: ZIP TO ARTIFACT
+        uses: judahh/zipToArtifact@main
         with:
-          cmd: build # will run `yarn build` command
-      - name: Test
-        uses: borales/actions-yarn@master
-        with:
-          cmd: test # will run `yarn test` command
-      - name: Test Integration
-        uses: borales/actions-yarn@master
-        with:
-          cmd: integration # will run `yarn test` command
+          folder: production
