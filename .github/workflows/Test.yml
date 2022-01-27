@@ -7,8 +7,8 @@ on:
       - "*/*" # matches every branch containing a single '/'
   push:
     branches:
-     - master
-     - main
+      - master
+      - main
 #     - devel
 #     - develop
 #     - development
@@ -36,6 +36,7 @@ jobs:
       - name: TEST
         uses: judahh/yarnTest@main
       - name: ZIP TO ARTIFACT
+        if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
         uses: judahh/zipToArtifact@main
         with:
           folder: production
