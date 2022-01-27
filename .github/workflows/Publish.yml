@@ -29,7 +29,7 @@ jobs:
       - name: ARTIFACT TO UNZIP
         uses: judahh/artifactToUnzip@main
         with:
-          folder: production
+          production: true
       - name: Publish
         if: contains(matrix.node-version, '14.x')
         uses: judahh/npmPublish@main
