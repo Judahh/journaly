@@ -39,4 +39,4 @@ jobs:
         if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
         uses: judahh/zipToArtifact@main
         with:
-          folder: production
+          production: true
