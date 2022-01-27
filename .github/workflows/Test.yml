@@ -5,6 +5,13 @@ on:
     branches:
       - "*" # matches every branch
       - "*/*" # matches every branch containing a single '/'
+  push:
+    branches:
+     - master
+     - main
+#     - devel
+#     - develop
+#     - development
 
 jobs:
   build:
